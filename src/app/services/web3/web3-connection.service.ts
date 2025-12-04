@@ -22,6 +22,8 @@ export class Web3Service implements IWeb3 {
   public account$ = toObservable(this.accountSig);
   public contractSig = signal<Contract<ContractAbi> | undefined>(undefined);
 
+  // TODO: Update endpoint to environment variable and support latest ethereum network
+  // Sepolia is discontinued, consider using Goerli or another testnet
   protected _web3 = new Web3('https://rpc2.sepolia.org');
   protected contractAddress = '0xc447Da346b84b6973799CF08Fb1fb6F71f5b184B';
   protected contractAbi = abiKey;
