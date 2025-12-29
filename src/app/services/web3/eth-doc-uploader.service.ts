@@ -44,7 +44,7 @@ export class EthDocUploaderService implements IDocUploderContract {
     if (!this.contract) throw new Error('Contract not found');
 
     try {
-      await this.contract.methods.add(fileName, hash, url).call({ from: this.account });
+      await this.contract.methods.add(fileName, hash, url).send({ from: this.account });
     } catch (error) {
       console.error('Error adding file to blockchain:', error);
       throw new Error('Error adding file to blockchain');

@@ -64,6 +64,41 @@ export class Web3Service implements IWeb3 {
       // Ensure we are using the correct provider
       this._web3.setProvider(provider);
 
+      // Check if we are on Sepolia (Chain ID 1115511 or 0xaa36a7)
+      const chainId = await provider.request({ method: 'eth_chainId' });
+      const sepoliaChainId = '0xaa36a7';
+
+      if (chainId !== sepoliaChainId) {
+        try {
+          await provider.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: sepoliaChainId }],
+          });
+        } catch (switchError: any) {
+          // This error code indicates that the chain has not been added to MetaMask.
+          if (switchError.code === 4902) {
+            await provider.request({
+              method: 'wallet_addEthereumChain',
+              params: [
+                {
+                  chainId: sepoliaChainId,
+                  chainName: 'Sepolia Test Network',
+                  nativeCurrency: {
+                    name: 'Sepolia ETH',
+                    symbol: 'ETH',
+                    decimals: 18,
+                  },
+                  rpcUrls: ['https://rpc.sepolia.org'],
+                  blockExplorerUrls: ['https://sepolia.etherscan.io'],
+                },
+              ],
+            });
+          } else {
+            throw switchError;
+          }
+        }
+      }
+
       // Request accounts
       const accounts = await provider.request({ method: 'eth_requestAccounts' });
 
