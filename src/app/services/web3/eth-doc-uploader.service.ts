@@ -44,13 +44,15 @@ export class EthDocUploaderService implements IDocUploderContract {
     if (!this.contract) throw new Error('Contract not found');
 
     try {
-      await this.contract.methods.add(fileName, hash, url).send({ from: this.account });
+      console.log('Sending transaction with data:', { fileName, hash, url });
+      await this.contract.methods.add(fileName, hash, url).send({ from: this.account, gas: '300000' });
     } catch (error) {
       console.error('Error adding file to blockchain:', error);
       throw new Error('Error adding file to blockchain');
     }
   }
   async getFile(index: number): Promise<FileInfo> {
+    console.log('getFile called with index:', index);
     if (!this.contract) throw new Error('Contract not found');
 
     try {
