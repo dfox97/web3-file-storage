@@ -1,37 +1,165 @@
 :host {
+  display: block;
+  width: 100%;
+}
+
+.app-header {
+  background: var(--dark-card);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.header-content {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: var(--spacing-md) var(--spacing-lg);
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 5rem;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
 
-  margin-top: 1rem;
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
 
-  button:hover {
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
-  }
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--primary-gradient);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-glow);
 
-  .logoutButton {
-    margin-left: 20px;
-  }
-
-  .userAddress {
-    font-size: 16px;
-    color: #333;
-    margin-right: 10px;
-  }
-  button {
-    background-image: linear-gradient(45deg, #5b5ab8, #9365b9);
+  svg {
+    width: 22px;
+    height: 22px;
     color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    padding: 10px 20px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease;
+  }
+}
+
+.brand-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .brand-text {
+    display: block;
+  }
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.address-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.address-badge:hover {
+  background: rgba(102, 126, 234, 0.15);
+  border-color: rgba(102, 126, 234, 0.4);
+}
+
+.wallet-icon {
+  width: 20px;
+  height: 20px;
+  color: #667eea;
+}
+
+.address-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: 'Courier New', monospace;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.logout-button:active {
+  transform: scale(0.98);
+}
+
+.logout-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.logout-text {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .logout-text {
+    display: block;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+  .header-content {
+    padding: var(--spacing-sm) var(--spacing-md);
   }
 
-  button:hover {
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+  .address-badge {
+    padding: 0.4rem 0.625rem;
+  }
+
+  .address-text {
+    font-size: 0.8rem;
+  }
+
+  .logout-button {
+    padding: 0.4rem 0.625rem;
+    min-width: auto;
+  }
+
+  .wallet-icon,
+  .logout-icon {
+    width: 18px;
+    height: 18px;
   }
 }

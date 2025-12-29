@@ -1,32 +1,10 @@
-body,
-html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  display: flex;
-  justify-content: center; /* Center the main container horizontally */
+:host {
+  display: block;
+  min-height: 100vh;
+  background: var(--dark-bg);
 }
 
-
-:host {
-  .container {
-    padding: 1%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    display: flex;
-    align-items: center; /* Center the app-viewer vertically */
-    app-viewer {
-      margin: 25% 50% 0;
-    }
-  }
-
-  .main-content {
-    display: flex;
-    align-items: center; /* Center the router-outlet vertically */
-    justify-content: center; /* Center the router-outlet horizontally */
-    flex-grow: 1; /* Make sure it takes the remaining space */
-    margin-left: 200px; /* Adjust based on the width of app-viewer to keep router-outlet centered */
-  }
+.app-container {
+  min-height: 100vh;
+  width: 100%;
 }

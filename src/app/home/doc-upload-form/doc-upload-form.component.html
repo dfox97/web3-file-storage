@@ -1,30 +1,77 @@
-<form [formGroup]="suggestForm" (ngSubmit)="publishToBlockchain()">
-  <h2>Store document from ipfs to Ethereum</h2>
+<div class="upload-card">
+  <div class="card-header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 18C7 18.7956 7.31607 19.5587 7.87868 20.1213C8.44129 20.6839 9.20435 21 10 21H14C14.7956 21 15.5587 20.6839 16.1213 20.1213C16.6839 19.5587 17 18.7956 17 18V10H7V18ZM14 3V4H19V6H5V4H10V3H14ZM19 8V18C19 19.3261 18.4732 20.5979 17.5355 21.5355C16.5979 22.4732 15.3261 23 14 23H10C8.67392 23 7.40215 22.4732 6.46447 21.5355C5.52678 20.5979 5 19.3261 5 18V8H19Z" fill="currentColor"/>
+        <path d="M12 12V18M9 15L12 12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <h2>Store Document to Blockchain</h2>
+      <p>Upload your files to IPFS and store on Ethereum</p>
+    </div>
+  </div>
 
-  <label class="required" for="file-name">File name</label>
-  <mat-form-field appearance="outline" >
-    <input id="file-name" matInput placeholder="Enter file name" formControlName="fileName">
-    <mat-error *ngIf="suggestForm.get('fileName')?.invalid && (suggestForm.get('fileName')?.dirty || suggestForm.get('fileName')?.touched)">
-      File name is required
-    </mat-error>
-  </mat-form-field>
+  <form [formGroup]="suggestForm" (ngSubmit)="publishToBlockchain()">
+    <div class="form-group">
+      <label class="form-label required" for="file-name">
+        <svg class="label-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 2V8H20M16 13H8M16 17H8M10 9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        File Name
+      </label>
+      <mat-form-field appearance="outline">
+        <input id="file-name" matInput placeholder="Enter file name" formControlName="fileName">
+        <mat-error *ngIf="suggestForm.get('fileName')?.invalid && (suggestForm.get('fileName')?.dirty || suggestForm.get('fileName')?.touched)">
+          File name is required
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-  <label for="ipfs-hash">ipfs hash</label>
-  <mat-form-field appearance="outline">
-    <input id="ipfs-hash" matInput placeholder="Enter hash" formControlName="ipfsHash">
-  </mat-form-field>
+    <div class="form-group">
+      <label class="form-label" for="ipfs-hash">
+        <svg class="label-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 7H17M7 12H17M7 17H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        IPFS Hash
+      </label>
+      <mat-form-field appearance="outline">
+        <input id="ipfs-hash" matInput placeholder="Enter IPFS hash" formControlName="ipfsHash">
+      </mat-form-field>
+    </div>
 
-  <label class="required" for="website">Url (IPFS)</label>
-  <mat-form-field appearance="outline">
-    <input id="website" matInput placeholder="Enter ipfs url" formControlName="url">
-    <mat-error *ngIf="suggestForm.get('url')?.invalid && (suggestForm.get('url')?.dirty || suggestForm.get('url')?.touched)">
-      Ipfs url is required
-    </mat-error>
-    <mat-error *ngIf="suggestForm.get('url')?.hasError('pattern')">
-      Enter a valid IPFS URL
-    </mat-error>
-  </mat-form-field>
+    <div class="form-group">
+      <label class="form-label required" for="website">
+        <svg class="label-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 13C10.4295 13.5741 10.9774 14.0491 11.6066 14.3929C12.2357 14.7367 12.9315 14.9411 13.6467 14.9923C14.3618 15.0435 15.0796 14.9403 15.7513 14.6897C16.4231 14.4392 17.0331 14.047 17.54 13.54L20.54 10.54C21.4508 9.59695 21.9548 8.33394 21.9434 7.02296C21.932 5.71198 21.4061 4.45791 20.4791 3.53087C19.5521 2.60383 18.298 2.07799 16.987 2.0666C15.676 2.0552 14.413 2.55918 13.47 3.46997L11.75 5.17997M14 11C13.5705 10.4258 13.0226 9.95078 12.3934 9.60703C11.7642 9.26327 11.0685 9.05885 10.3533 9.00763C9.63816 8.95641 8.92037 9.0596 8.24861 9.31018C7.57685 9.56077 6.96684 9.9529 6.45996 10.46L3.45996 13.46C2.54917 14.403 2.04519 15.666 2.05659 16.977C2.06798 18.288 2.59382 19.5421 3.52086 20.4691C4.4479 21.3961 5.70197 21.922 7.01295 21.9334C8.32393 21.9448 9.58694 21.4408 10.53 20.53L12.24 18.82" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        IPFS URL
+      </label>
+      <mat-form-field appearance="outline">
+        <input id="website" matInput placeholder="ipfs://..." formControlName="url">
+        <mat-error *ngIf="suggestForm.get('url')?.invalid && (suggestForm.get('url')?.dirty || suggestForm.get('url')?.touched)">
+          IPFS URL is required
+        </mat-error>
+        <mat-error *ngIf="suggestForm.get('url')?.hasError('pattern')">
+          Enter a valid IPFS URL
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-  <button mat-flat-button color="accent"  (click)="suggestForm.reset()">Cancel</button>
-  <button mat-flat-button color="primary" [disabled]="suggestForm.invalid">Submit to blockchain</button>
-</form>
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" mat-flat-button (click)="suggestForm.reset()">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" mat-flat-button [disabled]="suggestForm.invalid">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Submit to Blockchain
+      </button>
+    </div>
+  </form>
+</div>

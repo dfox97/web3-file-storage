@@ -22,15 +22,16 @@ export class Web3Service implements IWeb3 {
   public account$ = toObservable(this.accountSig);
   public contractSig = signal<Contract<ContractAbi> | undefined>(undefined);
 
-  // TODO: Update endpoint to environment variable and support latest ethereum network
-  // Sepolia is discontinued, consider using Goerli or another testnet
-  protected _web3 = new Web3('https://rpc2.sepolia.org');
+  // Sepolia is the active testnet, Goerli is discontinued.
+  protected _web3: Web3;
   protected contractAddress = '0xc447Da346b84b6973799CF08Fb1fb6F71f5b184B';
   protected contractAbi = abiKey;
 
   constructor() {
-    if (window.ethereum) {
-      this._web3 = new Web3("https://rpc2.sepolia.org");
+    if (typeof window !== 'undefined' && window.ethereum) {
+      this._web3 = new Web3(window.ethereum);
+    } else {
+      this._web3 = new Web3('https://rpc2.sepolia.org');
     }
   }
 
@@ -48,23 +49,35 @@ export class Web3Service implements IWeb3 {
 
 
   async initializeWeb3(): Promise<Web3> {
-    if (!this._web3) {
+    if (typeof window === 'undefined' || !window.ethereum) {
       throw new Error("MetaMask not found. Please install MetaMask.");
     }
 
     try {
+      // Re-initialize web3 with window.ethereum to ensure we're using the provider
+      this._web3.setProvider(window.ethereum);
+
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      
+      if (!accounts || accounts.length === 0) {
+        throw new Error("No accounts found. Please unlock MetaMask.");
+      }
+
       this.accountSig.set(accounts[0]);
 
-      const _contract = new this.web3.eth.Contract<ContractAbi>(this.contractAbi, this.contractAddress, {
+      const _contract = new this._web3.eth.Contract<ContractAbi>(this.contractAbi, this.contractAddress, {
         from: this.accountSig(),
       })
 
       this.contractSig.set(_contract);
 
       return this._web3;
-    } catch (error) {
-      console.error("User denied account access:", error);
+    } catch (error: any) {
+      if (error.code === -32603) {
+        console.error("MetaMask error: No active wallet or internal error. Try unlocking MetaMask.");
+      } else {
+        console.error("User denied account access or error occurred:", error);
+      }
       throw error;
     }
   }
