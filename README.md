@@ -1,13 +1,26 @@
-# Decentralized file uploader 
-Project based on creating ethereum smart contract to store ipfs and file data onto blockchain. Use IPFS as a decentralized storage db to allow storing and retrieving documents uploaded to ipfs. Use Ethereum to backup that data and allow users to retrieve, send and verfiy data. 
-![image](https://github.com/dfox97/Web3-file-storage-ethereum-ipfs/assets/61083107/070ce660-7bb4-4152-bc6a-fc90b2923b5a)
+# Decentralized File Uploader
 
+A simple Web3 application that allows users to upload documents to IPFS and store the resulting IPFS hash on the Ethereum blockchain. This provides a decentralized way to store, verify, and retrieve document data.
 
-# Requirements
+## How It Works
+- Upload a file from the UI
+- File is stored on IPFS (decentralized storage)
+- The IPFS hash is saved to an Ethereum smart contract
+- Users can retrieve and verify stored documents using the contract
 
-Metamask account
+## Features
+- IPFS file storage
+- Ethereum smart contract for hash storage
+- Web3 wallet integration (MetaMask)
+- Document upload, retrieval, and verification UI
 
-Ethereum Sepolia Test Network
+## Requirements
+- MetaMask wallet
+- Ethereum Sepolia Test Network
+- Test ETH for gas fees (use a faucet such as https://cloud.google.com/application/web3/faucet/ethereum/sepolia)
 
-To add documents you will need Test Ethereum for paying gas fees.
-Use a Faucet like:  https://cloud.google.com/application/web3/faucet/ethereum/sepolia
+## Tech Stack
+- Angular frontend
+- Solidity smart contract
+- IPFS decentralized storage
+- Web3.js for blockchain interaction
