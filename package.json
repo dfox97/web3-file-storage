@@ -7,6 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "node --max_old_space_size=5120 ./node_modules/@angular/cli/bin/ng test --code-coverage --browsers ChromeNoSandboxHeadless",
+    "build:stats": "ng build --configuration production --stats-json --output-path dist",
+    "analyze": "webpack-bundle-analyzer dist/login-frontend/stats.json",
     "lint": "ng lint"
   },
   "private": true,
@@ -30,6 +32,9 @@
     "zone.js": "~0.14.6"
   },
   "devDependencies": {
+    "@angular-devkit/architect": "^0.1802.0",
+    "@angular-devkit/build-angular": "^18.2.0",
+    "@angular-devkit/core": "^18.2.0",
     "@angular-eslint/builder": "^18.0.0",
     "@angular-eslint/eslint-plugin": "^18.0.0",
     "@angular-eslint/eslint-plugin-template": "^18.0.0",
@@ -50,8 +55,6 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.4.5",
-    "@angular-devkit/build-angular": "^18.2.0",
-    "@angular-devkit/architect": "^0.1802.0",
-    "@angular-devkit/core": "^18.2.0"
+    "webpack-bundle-analyzer": "^5.1.0"
   }
 }
