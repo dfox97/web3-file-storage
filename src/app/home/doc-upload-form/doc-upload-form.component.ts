@@ -40,7 +40,7 @@ export class DocUploadFormComponent {
     return this.suggestForm.controls;
   }
 
-  public publishToBlockchain() {
+  public async publishToBlockchain() {
     const formData = this.values;
 
     if (!formData) {
@@ -49,9 +49,15 @@ export class DocUploadFormComponent {
     }
 
     if (this.suggestForm.valid) {
-      this.#ethDocUploaderService.add(formData.fileName, formData.ipfsHash, formData.url);
-
-      this.suggestForm.reset();
+      try {
+        await this.#ethDocUploaderService.add(formData.fileName, formData.ipfsHash, formData.url);
+        this.suggestForm.reset();
+        // Optionally, show a success message to the user
+        console.log('File successfully added to blockchain!');
+      } catch (error) {
+        console.error('Error publishing to blockchain:', error);
+        // Optionally, show an error message to the user
+      }
     } else {
       // Mark all fields as touched to trigger validation messages
       this.suggestForm.markAllAsTouched();
