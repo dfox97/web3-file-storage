@@ -24,7 +24,7 @@ export class Web3Service implements IWeb3 {
 
   // Sepolia is the active testnet, Goerli is discontinued.
   protected _web3: Web3;
-  protected contractAddress = '0xc447Da346b84b6973799CF08Fb1fb6F71f5b184B';
+  protected contractAddress = '0x39317824539b9B348859dC04aa569Ae653229920';
   protected contractAbi = abiKey;
 
   constructor() {
@@ -54,11 +54,19 @@ export class Web3Service implements IWeb3 {
     }
 
     try {
-      // Re-initialize web3 with window.ethereum to ensure we're using the provider
-      this._web3.setProvider(window.ethereum);
+      let provider = window.ethereum;
 
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      
+      // Handle multiple providers (common in Brave or with multiple wallets)
+      if (window.ethereum.providers?.length) {
+        provider = window.ethereum.providers.find((p: any) => p.isMetaMask) || window.ethereum.providers[0];
+      }
+
+      // Ensure we are using the correct provider
+      this._web3.setProvider(provider);
+
+      // Request accounts
+      const accounts = await provider.request({ method: 'eth_requestAccounts' });
+
       if (!accounts || accounts.length === 0) {
         throw new Error("No accounts found. Please unlock MetaMask.");
       }
@@ -73,10 +81,12 @@ export class Web3Service implements IWeb3 {
 
       return this._web3;
     } catch (error: any) {
+      console.error("Detailed Web3 Error:", error);
+
       if (error.code === -32603) {
-        console.error("MetaMask error: No active wallet or internal error. Try unlocking MetaMask.");
-      } else {
-        console.error("User denied account access or error occurred:", error);
+        if (window.ethereum.isBraveWallet && !window.ethereum.isMetaMask) {
+          console.error("Brave Wallet conflict detected. Please go to brave://settings/web3 and set 'Default Ethereum wallet' to 'Extensions (MetaMask)'");
+        }
       }
       throw error;
     }

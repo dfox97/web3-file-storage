@@ -27,14 +27,12 @@ export class DocUploadFormComponent {
   readonly #ethDocUploaderService = inject(EthDocUploaderService);
 
 
-  private readonly websiteRegEx = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=]+$/;
-
   /* private blockchainContext: any;  */ // strategy pattern to use different blockchains.
 
   protected readonly suggestForm = this.#formBuilder.nonNullable.group({
     fileName: ['', [Validators.required]],
     ipfsHash: ['', [Validators.required]],
-    url: ['', [Validators.pattern(this.websiteRegEx)]],
+    url: ['', [Validators.required]],
   });
 
 

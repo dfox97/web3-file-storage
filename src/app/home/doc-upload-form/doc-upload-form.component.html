@@ -50,12 +50,6 @@
       </label>
       <mat-form-field appearance="outline">
         <input id="website" matInput placeholder="ipfs://..." formControlName="url">
-        <mat-error *ngIf="suggestForm.get('url')?.invalid && (suggestForm.get('url')?.dirty || suggestForm.get('url')?.touched)">
-          IPFS URL is required
-        </mat-error>
-        <mat-error *ngIf="suggestForm.get('url')?.hasError('pattern')">
-          Enter a valid IPFS URL
-        </mat-error>
       </mat-form-field>
     </div>
 
