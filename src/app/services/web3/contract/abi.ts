@@ -1,107 +1,70 @@
 export const abiKey = [
   {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_fileName",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_hash",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_url",
-        "type": "string"
-      }
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: "address", name: "user", type: "address" },
+      { indexed: false, internalType: "string", name: "cid", type: "string" },
+      { indexed: false, internalType: "string", name: "name", type: "string" },
+      { indexed: false, internalType: "uint256", name: "timestamp", type: "uint256" }
     ],
-    "name": "add",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "DocumentAdded",
+    type: "event"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_index",
-        "type": "uint256"
-      }
+    inputs: [
+      { internalType: "string", name: "cid", type: "string" },
+      { internalType: "string", name: "name", type: "string" }
     ],
-    "name": "getFile",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
+    name: "addDocument",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
   },
   {
-    "inputs": [],
-    "name": "getHash",
-    "outputs": [
+    inputs: [
+      { internalType: "address", name: "user", type: "address" }
+    ],
+    name: "getAllDocuments",
+    outputs: [
       {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
+        components: [
+          { internalType: "string", name: "cid", type: "string" },
+          { internalType: "string", name: "name", type: "string" },
+          { internalType: "uint256", name: "timestamp", type: "uint256" }
+        ],
+        internalType: "struct IPFSFileStore.Document[]",
+        name: "",
+        type: "tuple[]"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function"
   },
   {
-    "inputs": [],
-    "name": "getLength",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+    inputs: [
+      { internalType: "address", name: "user", type: "address" },
+      { internalType: "uint256", name: "index", type: "uint256" }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    name: "getDocument",
+    outputs: [
+      { internalType: "string", name: "cid", type: "string" },
+      { internalType: "string", name: "name", type: "string" },
+      { internalType: "uint256", name: "timestamp", type: "uint256" }
+    ],
+    stateMutability: "view",
+    type: "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "hashToVerify",
-        "type": "string"
-      }
+    inputs: [
+      { internalType: "address", name: "user", type: "address" }
     ],
-    "name": "verifyDocument",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+    name: "getDocumentCount",
+    outputs: [
+      { internalType: "uint256", name: "", type: "uint256" }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function"
   }
 ] as const;
-// 'as const' is important part, without it typescript would create generic type and remove available methods from type
 
-
+// 'as const' keeps ABI types exact
