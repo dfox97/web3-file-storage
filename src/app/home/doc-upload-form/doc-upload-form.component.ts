@@ -2,70 +2,45 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { EthDocUploaderService } from '../../services/web3/eth-doc-uploader.service';
 
-type FormData = {
-  fileName: string;
-  ipfsHash: string;
-  url: string;
-};
-
-type FormDataControls = { [key in keyof FormData]: FormControl };
+export interface FormData {
+  cid: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-doc-upload-form',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, FormsModule, MatButtonModule, MatInputModule,
-    ReactiveFormsModule],
+  imports: [CommonModule, MatFormFieldModule, FormsModule, MatButtonModule, MatInputModule, ReactiveFormsModule],
   templateUrl: './doc-upload-form.component.html',
   styleUrls: ['./doc-upload-form.component.scss']
 })
 export class DocUploadFormComponent {
-  readonly #formBuilder = inject(FormBuilder);
-  readonly #ethDocUploaderService = inject(EthDocUploaderService);
+  #formBuilder = inject(FormBuilder);
+  #eth = inject(EthDocUploaderService);
 
-
-  /* private blockchainContext: any;  */ // strategy pattern to use different blockchains.
-
-  protected readonly suggestForm = this.#formBuilder.nonNullable.group({
-    fileName: ['', [Validators.required]],
-    ipfsHash: ['', [Validators.required]],
-    url: ['', [Validators.required]],
+  form = this.#formBuilder.nonNullable.group({
+    cid: ['', Validators.required],
+    name: ['', Validators.required]
   });
 
-
-  protected get controls(): FormDataControls {
-    return this.suggestForm.controls;
-  }
-
-  public async publishToBlockchain() {
-    const formData = this.values;
-
-    if (!formData) {
-      console.error('Form data is empty');
+  async publishToBlockchain() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
-    if (this.suggestForm.valid) {
-      try {
-        await this.#ethDocUploaderService.add(formData.fileName, formData.ipfsHash, formData.url);
-        this.suggestForm.reset();
-        // Optionally, show a success message to the user
-        console.log('File successfully added to blockchain!');
-      } catch (error) {
-        console.error('Error publishing to blockchain:', error);
-        // Optionally, show an error message to the user
-      }
-    } else {
-      // Mark all fields as touched to trigger validation messages
-      this.suggestForm.markAllAsTouched();
+    const { cid, name } = this.form.getRawValue();
+
+    try {
+      await this.#eth.addDocument(cid, name);
+      this.form.reset();
+      console.log('Document stored on chain');
+    } catch (e) {
+      console.error('Failed to store document', e);
     }
   }
-
-  private get values(): FormData {
-    return this.suggestForm.getRawValue();
-  }
-
 }

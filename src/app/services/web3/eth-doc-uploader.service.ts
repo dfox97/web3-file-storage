@@ -1,37 +1,23 @@
 import { Injectable, inject } from '@angular/core';
 import { Web3Service } from './web3-connection.service';
 
-interface FileResponse {
-  "0": string; // fileName
-  "1": string; // hash
-  "2": string; // url
-  "__length__": number;
+export interface DocumentInfo {
+  cid: string;
+  name: string;
+  timestamp: number;
 }
 
-
-export interface FileInfo {
-  fileName: string;
-  hash: string;
-  url: string;
+export interface IIPFSContract {
+  addDocument: (cid: string, name: string) => Promise<void>;
+  getDocument: (user: string, index: number) => Promise<DocumentInfo>;
+  getDocumentCount: (user: string) => Promise<number>;
 }
 
-interface IDocUploderContract {
-  add: (fileName: string, hash: string, url: string) => Promise<void>;
-  getFile: (index: number) => Promise<FileInfo>;
-  getHash: () => Promise<string>;
-  getLength: () => Promise<number>;
-  verifyDocument: (index: number, hashToVerify: string) => Promise<boolean>;
-}
-
-
-//TODO: Make this a seperate class and web3 service its own class.
-@Injectable({
-  providedIn: 'root'
-})
-export class EthDocUploaderService implements IDocUploderContract {
+@Injectable({ providedIn: 'root' })
+export class EthDocUploaderService {
   #web3Service = inject(Web3Service);
 
-  private get account() {
+  public get account() {
     return this.#web3Service.account;
   }
 
@@ -39,70 +25,44 @@ export class EthDocUploaderService implements IDocUploderContract {
     return this.#web3Service.contract;
   }
 
-  async add(fileName: string, hash: string, url: string): Promise<void> {
-    if (!this.account) throw new Error('Account not found')
+  async addDocument(cid: string, name: string): Promise<void> {
+    if (!this.account) throw new Error('Account not found');
     if (!this.contract) throw new Error('Contract not found');
 
     try {
-      console.log('Sending transaction with data:', { fileName, hash, url });
-      await this.contract.methods.add(fileName, hash, url).send({ from: this.account, gas: '300000' });
-    } catch (error) {
-      console.error('Error adding file to blockchain:', error);
-      throw new Error('Error adding file to blockchain');
+      await this.contract.methods
+      ['addDocument'](cid, name)
+        .send({ from: this.account, gas: '300000' });
+    } catch (e) {
+      console.error('Error storing document:', e);
+      throw new Error('Error storing document');
     }
   }
-  async getFile(index: number): Promise<FileInfo> {
-    console.log('getFile called with index:', index);
+
+  async getUserDocumentCount(user: string): Promise<number> {
     if (!this.contract) throw new Error('Contract not found');
+    try {
+      return await this.contract.methods['getDocumentCount'](user).call();
+    } catch (e) {
+      console.error('Error reading document count:', e);
+      throw new Error('Error reading document count');
+    }
+  }
+
+  async getUserDocument(user: string | undefined, index: number): Promise<DocumentInfo> {
+    if (!this.contract) throw new Error('Contract not found');
+    if (!user) throw new Error('User address is undefined');
 
     try {
-      const result = await this.contract.methods.getFile(index).call<FileResponse>();
-
+      const result = await this.contract.methods['getDocument'](user, index).call();
       return {
-        fileName: result[0],
-        hash: result[1],
-        url: result[2],
+        cid: result[0],
+        name: result[1],
+        timestamp: Number(result[2])
       };
-    } catch (error) {
-      console.error('Error getting file from blockchain:', error);
-      throw new Error('Error getting file from blockchain');
-    }
-  }
-
-
-  async getHash(): Promise<string> {
-    if (!this.account) throw new Error('Account not found')
-    if (!this.contract) throw new Error('Contract not found');
-
-    try {
-      return await this.contract.methods.getHash().call();
-    } catch (error) {
-      console.error('Error getting hash from blockchain:', error);
-      throw new Error('Error getting hash from blockchain');
-    }
-  }
-
-  async getLength(): Promise<number> {
-    if (!this.account) throw new Error('Account not found')
-    if (!this.contract) throw new Error('Contract not found');
-
-    try {
-      return await this.contract.methods.getLength().call();
-    } catch (error) {
-      console.error('Error getting length from blockchain:', error);
-      throw new Error('Error getting length from blockchain');
-    }
-  }
-
-  async verifyDocument(index: number, hashToVerify: string): Promise<boolean> {
-    if (!this.account) throw new Error('Account not found')
-    if (!this.contract) throw new Error('Contract not found');
-
-    try {
-      return await this.contract.methods.verifyDocument(index, hashToVerify).call();
-    } catch (error) {
-      console.error('Error verifying document from blockchain:', error);
-      throw new Error('Error verifying document from blockchain');
+    } catch (e) {
+      console.error('Error fetching document:', e);
+      throw new Error('Error fetching document');
     }
   }
 }

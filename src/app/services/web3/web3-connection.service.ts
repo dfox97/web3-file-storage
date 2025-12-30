@@ -24,7 +24,7 @@ export class Web3Service implements IWeb3 {
 
   // Sepolia is the active testnet, Goerli is discontinued.
   protected _web3: Web3;
-  protected contractAddress = '0xCC31BB7d0E2dF7d2432288C697489Cf2FD417512';
+  protected contractAddress = '0xe23DC849ae3D0F8614Ee3035eBE0C14194C793c6';
   protected contractAbi = abiKey;
 
   constructor() {

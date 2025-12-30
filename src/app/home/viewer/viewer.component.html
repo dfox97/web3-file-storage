@@ -16,10 +16,14 @@
     <form>
       <div class="search-group">
         <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Ethereum Address</mat-label>
+          <input matInput [value]="address()" (input)="address.set($any($event.target).value)">
+        </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
           <mat-label>Document Index</mat-label>
           <input matInput type="number" (keydown)="setIndex($event)" placeholder="Enter index number">
         </mat-form-field>
-        <button mat-flat-button type="button" class="search-button" (click)="getFileInfo(index())">
+        <button mat-flat-button type="button" class="search-button" (click)="getFileInfo()">
           <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
             <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -51,7 +55,7 @@
           </svg>
           File Name
         </div>
-        <div class="data-value">{{ data()?.fileName || 'N/A' }}</div>
+        <div class="data-value">{{ data()?.name || 'N/A' }}</div>
       </div>
 
       <div class="data-item">
@@ -61,7 +65,7 @@
           </svg>
           IPFS Hash
         </div>
-        <div class="data-value hash">{{ data()?.hash || 'N/A' }}</div>
+        <div class="data-value hash">{{ data()?.cid|| 'N/A' }}</div>
       </div>
 
       <div class="data-item">
@@ -69,13 +73,13 @@
           <svg class="data-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 13C10.4295 13.5741 10.9774 14.0491 11.6066 14.3929C12.2357 14.7367 12.9315 14.9411 13.6467 14.9923C14.3618 15.0435 15.0796 14.9403 15.7513 14.6897C16.4231 14.4392 17.0331 14.047 17.54 13.54L20.54 10.54C21.4508 9.59695 21.9548 8.33394 21.9434 7.02296C21.932 5.71198 21.4061 4.45791 20.4791 3.53087C19.5521 2.60383 18.298 2.07799 16.987 2.0666C15.676 2.0552 14.413 2.55918 13.47 3.46997L11.75 5.17997M14 11C13.5705 10.4258 13.0226 9.95078 12.3934 9.60703C11.7642 9.26327 11.0685 9.05885 10.3533 9.00763C9.63816 8.95641 8.92037 9.0596 8.24861 9.31018C7.57685 9.56077 6.96684 9.9529 6.45996 10.46L3.45996 13.46C2.54917 14.403 2.04519 15.666 2.05659 16.977C2.06798 18.288 2.59382 19.5421 3.52086 20.4691C4.4479 21.3961 5.70197 21.922 7.01295 21.9334C8.32393 21.9448 9.58694 21.4408 10.53 20.53L12.24 18.82" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          URL
+         Timestamp
         </div>
         <div class="data-value url">
-          <a *ngIf="data()?.url" [href]="data()?.url" target="_blank" rel="noopener noreferrer">
-            {{ data()?.url }}
+          <a *ngIf="data()?.timestamp" [href]="data()?.timestamp" target="_blank" rel="noopener noreferrer">
+            {{ data()?.timestamp }}
           </a>
-          <span *ngIf="!data()?.url">N/A</span>
+          <span *ngIf="!data()?.timestamp">N/A</span>
         </div>
       </div>
     </div>
